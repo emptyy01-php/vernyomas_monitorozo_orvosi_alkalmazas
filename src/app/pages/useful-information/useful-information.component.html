@@ -1,0 +1,11 @@
+
+<div class="container">
+    <mat-card 
+    *ngFor="let card of cards; let i = index"
+    class="card" 
+    [ngClass]="{ 'expanded': expanded[i] }" 
+    (click)="toggle(i)">
+    <h3>{{ card.title }}</h3>
+    <p *ngIf="expanded[i]">{{ card.text }}</p>
+    </mat-card>
+</div>

@@ -1,0 +1,95 @@
+<mat-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Személyes adatok</ng-template>
+      <div class="container">
+        <div class="field-container">
+          <mat-form-field>
+            <mat-label>Név</mat-label>
+            <input matInput placeholder="pl.: Almási Aladár" formControlName="name" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Lakcím</mat-label>
+            <input matInput placeholder="pl.: 1234 Budapest, Valami utca 1." formControlName="address" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>TAJ-kártya</mat-label>
+            <input matInput placeholder="pl.: 123456789" formControlName="taj" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput type="email" placeholder="pl.: alma@pelda.hu" formControlName="email" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Telefonszám</mat-label>
+            <input matInput type="tel" placeholder="pl.: +36 20 123 4567" formControlName="phone" required>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Megjegyzés</mat-label>
+            <textarea matInput placeholder="Írjon ide bármit..." formControlName="note"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="field-container">
+          <img class="picture" src="meres.png" alt="Orvos">
+          <h3>Nálunk a legjobb kezekben van!</h3>
+        </div>
+      </div>
+      <div>
+        <button mat-button matStepperNext>Következő</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup" label="Időpontfoglalás">
+    <form [formGroup]="secondFormGroup">
+      <div class="container">
+        <div class="field-container">
+          <mat-form-field appearance="fill">
+            <mat-label>Dátum</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date" [min]="minDate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+    
+          <mat-form-field appearance="fill">
+            <mat-label>Időpont</mat-label>
+            <input matInput type="time" formControlName="time" required>
+          </mat-form-field>
+    
+          <mat-form-field appearance="fill">
+            <mat-label>Helyszín</mat-label>
+            <mat-select formControlName="location" required>
+              <mat-option value="budapest">Budapest, Alkotás utca 1.</mat-option>
+              <mat-option value="debrecen">Debrecen, Piac utca 2.</mat-option>
+              <mat-option value="szeged">Szeged, Tisza Lajos körút 3.</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="field-container">
+          <iframe
+            *ngIf="selectedMapUrl"
+            width="100%"
+            height="300"
+            frameborder="0"
+            style="border:0"
+            [src]="selectedMapUrl | safeUrl"
+            allowfullscreen>
+        </iframe>
+        </div>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Vissza</button>
+        <button mat-button matStepperNext>Következő</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Véglegesítés</ng-template>
+    <p>Sikeresen lefoglalta az időpontot! Köszönjük, hogy minket választott!</p>
+    <div>
+      <button mat-button matStepperPrevious>Vissza</button>
+      <button mat-button (click)="stepper.reset()">Törlés</button>
+    </div>
+  </mat-step>
+</mat-stepper>

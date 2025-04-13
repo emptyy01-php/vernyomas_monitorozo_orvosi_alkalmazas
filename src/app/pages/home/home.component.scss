@@ -1,0 +1,96 @@
+header {
+  color: white;
+  text-shadow: 4px 4px 8px black;
+  position: relative;
+  width: 100%;
+  height: 400px;
+  box-shadow: 4px 4px 8px grey;
+  background-image: url('/header.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+header .container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+}
+
+.container h1 {
+  font-size: 3.3rem;
+}
+
+.container img {
+  padding-top: 50px;
+  width: 300px;
+}
+
+main h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  padding: 75px;
+  animation: float-in-top 1s ease-in-out;
+}
+
+main h2 {
+  margin: 30px auto 5px auto;
+  font-size: 1.3rem;
+  width: 80%;
+  animation: float-in-left 1s ease-in-out;
+}
+
+main p,ul {
+  text-align: justify;
+  margin: 15px auto;
+  font-size: 1.3rem;
+  width: 80%;
+  animation: float-in-top 1s ease-in-out;
+
+}
+
+@keyframes float-in-top {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+
+  }
+}
+
+@keyframes float-in-left {
+  0% {
+    opacity: 0;
+    transform: translate(-10px);
+  }
+  100% {
+
+  }
+}
+
+@media screen and (max-width: 426px) {
+  h1 {
+    font-size: 2.4rem !important;
+  }
+}
+
+@media screen and (min-width: 426px) and (max-width: 768px) {
+  h1 {
+    font-size: 2.7rem !important;
+  }
+} 
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  img {
+    padding: 0 !important;
+  }
+}
+
+
+:host-context(body.dark-mode) { //Ezzel lesz jó a dark mode
+    background-color: #121212;
+    color: white;
+}

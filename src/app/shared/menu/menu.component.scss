@@ -1,0 +1,43 @@
+a {
+    text-decoration: none;
+    color: white;
+    font-size: 20px;
+    border-radius: 0 !important;
+}
+
+.mdc-list-item:focus::before {
+    opacity: 0 !important;
+}
+
+.active-list-item {
+    background-color: rgba(90, 74, 247, 0.3);
+    color: white;
+    font-weight: bold;
+}
+
+mat-nav-list {
+    min-width: 200px;
+    
+}
+:host-context(body.dark-mode) {
+    background-color: #121212;
+    color: white;
+  
+    a {
+      color: white;
+    }
+  
+    mat-icon {
+      color: white;
+    }
+  
+    span {
+      color: white;
+    }
+  
+    .active-list-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      font-weight: bold;
+      color: white !important;
+    }
+  }

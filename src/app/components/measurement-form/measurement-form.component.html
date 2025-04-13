@@ -1,0 +1,36 @@
+
+<main>
+    <form #measurementForm="ngForm" (ngSubmit)="onSubmit()">
+        <section>
+            <img src="sys.png" alt="SYS ikon">
+            <div>
+                <label for="systolic">SYS</label>
+                <input type="number" id="systolic" name="systolic" [(ngModel)]="measurement.systolic" min="0" required>
+            </div>
+    
+        </section>
+        
+        <section>
+            <img src="dia.png" alt="DIA ikon">
+            <div>
+                <label for="diastolic">DIA</label>
+                <input type="number" id="diastolic" name="diastolic" [(ngModel)]="measurement.diastolic" min="0" required>
+            </div>
+        </section>
+        
+        <section>
+            <img src="pulse.png" alt="PULSE ikon">
+            <div>
+                <label for="pulse">PUL</label>
+                <input type="number" id="pulse" name="pulse" [(ngModel)]="measurement.pulse" min="0" required>
+            </div>
+        </section>
+    
+        <section>
+            <label for="timestamp">Metés dátuma</label>
+            <input type="datetime-local" id="timestamp" name="timestamp" [(ngModel)]="measurement.timestamp" required>
+        </section>
+    
+        <button type="submit" [disabled]="!measurementForm.form.valid">Mentés</button>
+    </form>
+</main>

@@ -1,0 +1,99 @@
+
+
+mat-stepper {
+    margin: 20px auto;
+    padding: 10px;
+    width: 50%;
+    border: 2px solid rgb(122, 122, 122);
+    border-radius: 5px;
+    box-shadow: 4px 4px 8px grey;
+}
+
+.container {
+    display: flex;
+}
+
+.picture {
+    width: 400px;
+    display: block;
+    margin: 0 auto;
+}
+
+.field-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.field-container h3 {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+.field-container:nth-of-type(2) {
+    width: 100%;
+}
+
+.field-container mat-form-field {
+    width:400px;
+}
+
+  /* Kisebb képernyők (telefonok) */
+@media (max-width: 768px) {
+    mat-stepper {
+        width: 90%;
+    }
+
+    .container {
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+  
+    .field-container {
+      width: 100%;
+      align-items: center;
+    }
+  
+    .field-container mat-form-field {
+      max-width: 90%;
+    }
+  
+    .picture {
+      max-width: 80%;
+    }
+  }
+  
+  /* Tabletek (közepes méret) */
+  @media (min-width: 769px) and (max-width: 960px) {
+    mat-stepper {
+        width: 90%;
+    }
+    .container {
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+  
+    .field-container {
+      width: 100%;
+      align-items: center;
+    }
+  
+    .field-container mat-form-field {
+      max-width: 80%;
+    }
+  }
+
+@media (min-width: 960px) and (max-width: 1200px){
+    mat-stepper {
+        width: 90%;
+    }
+}  
+@media (min-width: 1201px) and (max-width: 1700px){
+    mat-stepper {
+        width: 80%;
+    }
+}  
+
+
