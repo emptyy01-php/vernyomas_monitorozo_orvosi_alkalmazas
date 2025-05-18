@@ -1,7 +1,12 @@
 
 <mat-sidenav-container>
   <mat-sidenav #sidenav>
-    <app-menu [sidenav]="sidenav" [isLoggedIn]="isLoggedIn" (logoutEvent)="logout()"></app-menu>
+    <app-menu
+      [sidenav]="sidenav"
+      [isLoggedIn]="isLoggedIn"
+      [userRole]="userRole"
+      (logoutEvent)="logout()">
+    </app-menu>
   </mat-sidenav>
   <mat-sidenav-content>
     <mat-toolbar>
@@ -17,10 +22,17 @@
           <li><a routerLink="/pages/home">Kezdőlap</a></li>
           <li><a routerLink="/pages/doctors">Orvosaink</a></li>
           <li><a routerLink="/pages/useful-information">Információk</a></li>
-            
           
           @if (isLoggedIn) {
-            <li><a routerLink="/pages/measurement">Mérések</a></li>
+            <li *ngIf="userRole === 'user'"><a routerLink="/pages/measurement">Mérések</a></li>
+            <li><a routerLink="/pages/profil"></a></li>  
+            <li *ngIf="userRole === 'user'">
+              <a routerLink="/pages/profil">Profil</a>
+            </li>
+            <li *ngIf="userRole === 'doctor'">
+              <a routerLink="/pages/doctor">Orvosi felület</a>
+            </li>
+            
           }
           
           @if (!isLoggedIn) {

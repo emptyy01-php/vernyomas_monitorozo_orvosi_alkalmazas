@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./doctors.component.scss']
 })
 export class DoctorsComponent {
+  
   doctors = [
     {
       id: '1',
@@ -31,6 +32,7 @@ export class DoctorsComponent {
         'A munkája során Ákos mindig különös figyelmet fordított arra, hogy a betegek ne csak a gyógyszerekre, hanem az életmódjukra és a megelőzésre is összpontosítsanak. Úgy vélte, hogy a szívbetegségek megelőzése kulcsfontosságú, és sokszor egy egyszerű életmódbeli változtatás is óriási különbséget jelenthet.'
       ]
     },
+    /*
     {
       id: '2',
       name: 'Dr. Kovács Tímea',
@@ -42,11 +44,12 @@ export class DoctorsComponent {
         'Tímea számára a legfontosabb a megelőzés és a korai felismerés volt. Egyre inkább elköteleződött amellett, hogy a gyerekek szívbetegségeit már az első életévekben észrevegyék, hogy a jövőben elkerülhetők legyenek a súlyosabb szövődmények. Az évek során számos sikeres kezelést végzett, de egy különleges eset mély nyomot hagyott benne.'
       ]
     }
+      */
   ];
-
+  
   constructor(private router: Router) { }  
 
-  navigateToAppointmentScheduling() {
-    this.router.navigate(['/pages/appointment-scheduling']);
+  navigateToAppointmentScheduling(doctor: { id: string, name: string }) {
+    this.router.navigate(['/pages/appointment-scheduling'], { queryParams: { doctorId: doctor.id, doctorName: doctor.name } });
   }
 }

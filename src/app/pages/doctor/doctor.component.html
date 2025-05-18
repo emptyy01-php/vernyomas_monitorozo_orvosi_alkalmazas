@@ -1,0 +1,172 @@
+<!-- Gyógyszer regisztráció -->
+ <div id="content">
+     <h2>Új gyógyszer hozzáadása</h2>
+     <form [formGroup]="medicineForm" (ngSubmit)="addMedicine()">
+       <mat-form-field appearance="fill">
+         <mat-label>Név</mat-label>
+         <input matInput formControlName="name" required>
+       </mat-form-field>
+     
+       <mat-form-field appearance="fill">
+         <mat-label>Leírás</mat-label>
+         <textarea matInput formControlName="description"></textarea>
+       </mat-form-field>
+     
+       <button mat-raised-button color="primary" type="submit">Hozzáadás</button>
+     </form>
+     <h2>Gyógyszerek listája</h2>
+<table mat-table [dataSource]="medicines" class="mat-elevation-z8">
+
+  <!-- Név oszlop -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Név</th>
+    <td mat-cell *matCellDef="let med">{{ med.name }}</td>
+  </ng-container>
+
+  <!-- Leírás oszlop -->
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Leírás</th>
+    <td mat-cell *matCellDef="let med">{{ med.description }}</td>
+  </ng-container>
+
+  <!-- Műveletek oszlop -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Műveletek</th>
+    <td mat-cell *matCellDef="let med">
+      <button mat-icon-button color="primary" (click)="startEdit(med)">
+        <mat-icon>edit</mat-icon>
+      </button>
+      <button mat-icon-button color="warn" (click)="deleteMedicine(med.id)">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['name', 'description', 'actions']"></tr>
+  <tr mat-row *matRowDef="let row; columns: ['name', 'description', 'actions'];"></tr>
+</table>
+
+<!-- Szerkesztés -->
+<div *ngIf="editingMedicine">
+  <h3>Gyógyszer szerkesztése</h3>
+  <form [formGroup]="editMedicineForm" (ngSubmit)="updateMedicine()">
+    <mat-form-field appearance="fill">
+      <mat-label>Név</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Leírás</mat-label>
+      <textarea matInput formControlName="description"></textarea>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit">Mentés</button>
+    <button mat-button type="button" (click)="cancelEdit()">Mégsem</button>
+  </form>
+</div>
+
+     <hr>
+     
+     <!-- Felhasználó keresés -->
+     <h2>Felhasználó gyógyszerkezelés</h2>
+     <p>Lehet keresni felhasználóra email alapján, és mindent megtudhatunk róla. Keress rá: uwu&#64;gmail.com</p>
+     <form [formGroup]="searchForm" (ngSubmit)="searchUser()">
+       <mat-form-field appearance="fill">
+         <mat-label>Email</mat-label>
+         <input matInput formControlName="email" required>
+       </mat-form-field>
+       <button mat-raised-button color="accent" type="submit">Keresés</button>
+     </form>
+     
+     <div *ngIf="user">
+       <p><strong>{{ user.firstname }} {{ user.lastname }}</strong> ({{ user.email }})</p>
+     
+       <!-- Hozzárendelés -->
+       <form [formGroup]="assignForm" (ngSubmit)="assignMedicine()">
+         <mat-form-field appearance="fill">
+           <mat-label>Gyógyszer</mat-label>
+           <mat-select formControlName="medicineId">
+             <mat-option *ngFor="let med of medicines" [value]="med.id">{{ med.name }}</mat-option>
+           </mat-select>
+         </mat-form-field>
+     
+         <mat-form-field appearance="fill">
+           <mat-label>Kezdés</mat-label>
+           <input matInput [matDatepicker]="startPicker" formControlName="medicationStartDate">
+           <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+           <mat-datepicker #startPicker></mat-datepicker>
+         </mat-form-field>
+     
+         <mat-form-field appearance="fill">
+           <mat-label>Befejezés</mat-label>
+           <input matInput [matDatepicker]="endPicker" formControlName="medicationEndDate">
+           <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+           <mat-datepicker #endPicker></mat-datepicker>
+         </mat-form-field>
+     
+         <button mat-raised-button color="primary" type="submit">Hozzárendelés</button>
+       </form>
+     
+       <!-- Hozzárendelt gyógyszerek -->
+       <h3>Gyógyszerei</h3>
+       <ul>
+         <li *ngFor="let item of userMedicines">
+           <strong>{{ item.medicine.name }}</strong> - {{ item.medicine.description }}
+           <button mat-button color="warn" (click)="removeMedicine(item.um.id)">Törlés</button>
+         </li>
+       </ul>
+     </div>
+     <h3>Mérések</h3>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+    <ng-container matColumnDef="systolic">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>SYS</th>
+        <td mat-cell *matCellDef="let m">{{ m.systolic }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="diastolic">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>DIA</th>
+        <td mat-cell *matCellDef="let m">{{ m.diastolic }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="pulse">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>PUL</th>
+        <td mat-cell *matCellDef="let m">{{ m.pulse }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Dátum</th>
+        <td mat-cell *matCellDef="let m">{{ m.timestamp | date:'medium' }}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"></mat-paginator>
+
+    <p>
+      Note: Lehet furának tűnik, hogy egy időpontra lehet több embernek foglalni, viszont az én orvosom is így rendel. Lehetett jelentkezni egy időpontra és van, hogy 2 embert is elfogadott, mert valaki csak receptért ment. Ezért valósítottam meg így.
+    </p>
+    <div class="appointments-container" *ngIf="appointments.length > 0; else noAppointments">
+      <div class="appointment-card" *ngFor="let app of appointments" [ngClass]="getStatusClass(app.status)">
+        <div><strong>Dátum:</strong> {{ formatDate(app.date) }}</div>
+        <div><strong>Idő:</strong> {{ app.time }}</div>
+        <div><strong>Felhasználó neve:</strong> {{ app.name || 'Nincs megadva' }}</div>
+        <div><strong>Leírás:</strong> {{ app.note || 'Nincs leírás' }}</div>
+        <div><strong>Telefonszám:</strong> {{ app.phone || 'Nincs megadva' }}</div>
+        <div><strong>Rendelő:</strong> {{ app.location || 'Nincs megadva' }}</div>
+        <div><strong>Státusz:</strong> {{ getHungarianStatus(app.status) }}</div>
+
+        <div class="actions" *ngIf="app.status === 'pending'">
+          <button (click)="updateAppointmentStatus(app.id!, 'accepted')" class="accept">✔️</button>
+          <button (click)="updateAppointmentStatus(app.id!, 'rejected')" class="reject">❌</button>
+        </div>
+      </div>
+  </div>
+
+<ng-template #noAppointments>
+  <p>Nincsenek foglalások.</p>
+</ng-template>  
+ </div>

@@ -11,10 +11,11 @@
         <p class="description" *ngFor="let desc of doctor.description">
           {{ desc }}
         </p>
-        <button mat-fab extended color="primary" (click)="navigateToAppointmentScheduling()">
+        <button mat-fab extended color="primary" (click)="navigateToAppointmentScheduling(doctor)">
             <mat-icon>calendar_month</mat-icon>
             Időpontfoglalás
         </button>
+
       </div>
     </mat-card-content>
   </mat-card>

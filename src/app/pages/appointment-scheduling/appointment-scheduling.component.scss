@@ -38,6 +38,47 @@ mat-stepper {
     width:400px;
 }
 
+
+.appointment-card {
+  padding: 1rem;
+  margin: 1rem 0;
+  border-radius: 8px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  transition: background-color 0.3s;
+}
+
+.status-pending {
+  background-color: #fff8e1; // sárga
+}
+
+.status-accepted {
+  background-color: #e8f5e9; // zöld
+}
+
+.status-rejected {
+  background-color: #ffebee; // piros
+}
+
+.actions {
+  margin-top: 10px;
+
+  button {
+    margin-right: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    background: none;
+    border: none;
+
+    &.accept {
+      color: green;
+    }
+
+    &.reject {
+      color: red;
+    }
+  }
+}
+
   /* Kisebb képernyők (telefonok) */
 @media (max-width: 768px) {
     mat-stepper {

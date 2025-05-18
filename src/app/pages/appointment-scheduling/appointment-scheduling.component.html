@@ -5,6 +5,10 @@
       <div class="container">
         <div class="field-container">
           <mat-form-field>
+            <mat-label>Orvos</mat-label>
+            <input matInput formControlName="doctorName" readonly>
+          </mat-form-field>
+          <mat-form-field>
             <mat-label>Név</mat-label>
             <input matInput placeholder="pl.: Almási Aladár" formControlName="name" required>
           </mat-form-field>
@@ -86,9 +90,9 @@
 
   <mat-step>
     <ng-template matStepLabel>Véglegesítés</ng-template>
-    <p>Sikeresen lefoglalta az időpontot! Köszönjük, hogy minket választott!</p>
     <div>
       <button mat-button matStepperPrevious>Vissza</button>
+      <button mat-button (click)="submitAppointment()">Időpont foglalása</button>
       <button mat-button (click)="stepper.reset()">Törlés</button>
     </div>
   </mat-step>

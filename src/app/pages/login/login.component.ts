@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -7,7 +7,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { CommonModule } from '@angular/common';
-
+import { AuthService } from '../../shared/services/auth.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -32,23 +33,61 @@ export class LoginComponent {
   isLoading: boolean = false;
   loginError: string = '';
   showLoginForm: boolean = true;
+  authSubscription?: Subscription;
 
-  constructor() {}
+
+  constructor(
+    private authService: AuthService, 
+    private router: Router
+  ) { }
 
   login() {
-    this.loginError = '';
-    
-    if (this.email.value === 'test@gmail.com' && this.password.value === 'testpw') {
-      this.isLoading = true;
-      this.showLoginForm = false;
-      
-      localStorage.setItem('isLoggedIn', 'true');
-      
-      setTimeout(() => {
-        window.location.href = '/pages/home';
-      }, 1000);
-    } else {
-      this.loginError = 'Helytelen email vagy jelszó!';
+    if (this.email.invalid) {
+      this.loginError = 'Please enter a valid email address';
+      return;
     }
+    
+    if (this.password.invalid) {
+      this.loginError = 'Password must be at least 6 characters long';
+      return;
+    }
+
+    const emailValue = this.email.value || '';
+    const passwordValue = this.password.value || '';
+    
+    this.isLoading = true;
+    this.showLoginForm = false;
+    this.loginError = '';
+
+    this.authService.signIn(emailValue, passwordValue)
+      .then(userCredential => {
+        console.log('Login successful:', userCredential.user);
+        this.authService.updateLoginStatus(true);
+        this.router.navigateByUrl('pages/home');
+      })
+      .catch(error => {
+        console.error('Login error:', error);
+        this.isLoading = false;
+        this.showLoginForm = true;
+        
+        switch(error.code) {
+          case 'auth/user-not-found':
+            this.loginError = 'No account found with this email address';
+            break;
+          case 'auth/wrong-password':
+            this.loginError = 'Incorrect password';
+            break;
+          case 'auth/invalid-credential':
+            this.loginError = 'Invalid email or password';
+            break;
+          default:
+            this.loginError = 'Authentication failed. Please try again later.';
+        }
+      });
   }
+
+  ngOnDestroy() {
+    this.authSubscription?.unsubscribe();
+  }
+
 }

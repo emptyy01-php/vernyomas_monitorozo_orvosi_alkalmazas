@@ -6,8 +6,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
-
-
+import { AuthService } from './shared/services/auth.service';
+import { Subscription } from 'rxjs';
+import { User } from './shared/models/User';
+import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-root',
   imports: [
@@ -17,31 +19,38 @@ import { RouterLink } from '@angular/router';
     MatButtonModule,
     MatIconModule,
     RouterLink,
-    MenuComponent
+    MenuComponent,
+    CommonModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'uwu';
+  title = 'vernyomas-monitor';
   isLoggedIn = false;
+  currentUser: User | null = null;
   colorType: "Light" | "Dark" = "Light";
   iconType: "light_mode" | "dark_mode" = "light_mode";
+  userRole: string | null = null;
+  private authSubscription?: Subscription;
 
-  constructor() {}
+  constructor(private authService: AuthService) {}
 
-  ngOnInit(): void {
-    this.checkLoginStatus();
+ ngOnInit(): void {
+    this.authSubscription = this.authService.currentUser.subscribe(user => {
+      this.isLoggedIn = !!user;
+      this.currentUser = user;
+      this.userRole = user?.role ?? null;
+      localStorage.setItem('isLoggedIn', this.isLoggedIn ? 'true' : 'false');
+    });
   }
 
   checkLoginStatus(): void {
     this.isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   }
 
-  logout(): void {
-    localStorage.setItem('isLoggedIn', 'false');
-    this.isLoggedIn = false;
-    window.location.href = '/pages/home';
+   logout(): void {
+    this.authService.signOut(); // a logout kezelése már az AuthService-ben van
   }
 
   onToggleSidenav(sidenav: MatSidenav){

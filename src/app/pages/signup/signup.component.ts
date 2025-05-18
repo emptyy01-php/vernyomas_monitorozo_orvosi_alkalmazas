@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { User } from '../../shared/models/User';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -35,45 +36,67 @@ export class SignupComponent {
       lastname: new FormControl('', [Validators.required, Validators.minLength(2)])
     })
   });
-  
+
   isLoading = false;
   showForm = true;
   signupError = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   signup(): void {
     if (this.signUpForm.invalid) {
-      this.signupError = 'Please correct the form errors before submitting.';
+      this.signupError = 'Please correct any errors on the form before submitting.';
       return;
     }
 
-    const password = this.signUpForm.get('password');
-    const rePassword = this.signUpForm.get('rePassword');
+    const password = this.signUpForm.get('password')?.value;
+    const rePassword = this.signUpForm.get('rePassword')?.value;
 
-    if (password?.value !== rePassword?.value) {
+    if (password !== rePassword) {
+      this.signupError = 'The passwords do not match.';
       return;
     }
 
     this.isLoading = true;
     this.showForm = false;
 
-    const newUser: User = {
-      name: {
-        firstname: this.signUpForm.value.name?.firstname || '',
-        lastname: this.signUpForm.value.name?.lastname || ''
-      },
+    const userData: Omit<User, 'id'> = {
+      firstname: this.signUpForm.value.name?.firstname || '',
+      lastname: this.signUpForm.value.name?.lastname || '',
       email: this.signUpForm.value.email || '',
-      password: this.signUpForm.value.password || '',
-      medicines: [],
-      completed_tasks: []
+      role: 'user'
     };
 
-    console.log('New user:', newUser);
-    console.log('Form value:', this.signUpForm.value);
+    const email = this.signUpForm.value.email || '';
+    const pw = this.signUpForm.value.password || '';
 
-    setTimeout(() => {
-      this.router.navigateByUrl('pages/home');
-    }, 2000);
+    this.authService.signUp(email, pw, userData)
+      .then(userCredential => {
+        console.log('Registration successful:', userCredential.user);
+        this.authService.updateLoginStatus(true);
+        this.router.navigateByUrl('/home');
+      })
+      .catch(error => {
+        console.error('Registration error:', error);
+        this.isLoading = false;
+        this.showForm = true;
+
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            this.signupError = 'This email is already in use.';
+            break;
+          case 'auth/invalid-email':
+            this.signupError = 'Invalid email.';
+            break;
+          case 'auth/weak-password':
+            this.signupError = 'The password is too weak. Use at least 6 characters.';
+            break;
+          default:
+            this.signupError = 'An error occurred during registration. Please try again later.';
+        }
+      });
   }
 }

@@ -3,30 +3,43 @@
     <mat-icon matListItemIcon>home</mat-icon>
     <span matListItemTitle>Kezdőlap</span>
   </a>
+
   <a mat-list-item routerLink="/pages/doctors" routerLinkActive="active-list-item" (click)="closeMenu()">
     <mat-icon matListItemIcon>assignment</mat-icon>
     <span matListItemTitle>Orvosaink</span>
   </a>
+
   <a mat-list-item routerLink="/pages/useful-information" routerLinkActive="active-list-item" (click)="closeMenu()">
     <mat-icon matListItemIcon>done_all</mat-icon>
     <span matListItemTitle>Információk</span>
   </a>
-  @if (isLoggedIn) {
-    <a mat-list-item routerLink="/pages/measurement" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>person</mat-icon>
-      <span matListItemTitle>Mérések</span>
-    </a>
-  }
-  @if (!isLoggedIn) {
-    <a mat-list-item routerLink="/pages/login" routerLinkActive="active-list-item" (click)="closeMenu()">
-      <mat-icon matListItemIcon>login</mat-icon>
-      <span matListItemTitle>Bejelentkezés</span>
-    </a>
-  }
-  @if (isLoggedIn) {
-    <a mat-list-item (click)="logout()">
-      <mat-icon matListItemIcon>logout</mat-icon>
-      <span matListItemTitle>Kijelentkezés</span>
-    </a>
-  }
+
+  <!-- USER -->
+  <a *ngIf="isLoggedIn && userRole === 'user'" mat-list-item routerLink="/pages/measurement" routerLinkActive="active-list-item" (click)="closeMenu()">
+    <mat-icon matListItemIcon>monitor_heart</mat-icon>
+    <span matListItemTitle>Mérések</span>
+  </a>
+
+  <a *ngIf="isLoggedIn && userRole === 'user'" mat-list-item routerLink="/pages/profil" routerLinkActive="active-list-item" (click)="closeMenu()">
+    <mat-icon matListItemIcon>person</mat-icon>
+    <span matListItemTitle>Profil</span>
+  </a>
+
+  <!-- DOCTOR -->
+  <a *ngIf="isLoggedIn && userRole === 'doctor'" mat-list-item routerLink="/pages/doctor" routerLinkActive="active-list-item" (click)="closeMenu()">
+    <mat-icon matListItemIcon>medical_information</mat-icon>
+    <span matListItemTitle>Orvosi felület</span>
+  </a>
+
+  <!-- GUEST -->
+  <a *ngIf="!isLoggedIn" mat-list-item routerLink="/pages/login" routerLinkActive="active-list-item" (click)="closeMenu()">
+    <mat-icon matListItemIcon>login</mat-icon>
+    <span matListItemTitle>Bejelentkezés</span>
+  </a>
+
+  <!-- LOGOUT -->
+  <a *ngIf="isLoggedIn" mat-list-item href="#" (click)="logoutClicked($event)">
+    <mat-icon matListItemIcon>logout</mat-icon>
+    <span matListItemTitle>Kijelentkezés</span>
+  </a>
 </mat-nav-list>
