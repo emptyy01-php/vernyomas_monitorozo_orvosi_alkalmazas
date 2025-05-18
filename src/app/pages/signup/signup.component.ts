@@ -48,7 +48,7 @@ export class SignupComponent {
 
   signup(): void {
     if (this.signUpForm.invalid) {
-      this.signupError = 'Please correct any errors on the form before submitting.';
+      this.signupError = '';
       return;
     }
 
@@ -56,7 +56,7 @@ export class SignupComponent {
     const rePassword = this.signUpForm.get('rePassword')?.value;
 
     if (password !== rePassword) {
-      this.signupError = 'The passwords do not match.';
+      this.signupError = 'A jelszavak nem egyeznek!';
       return;
     }
 
@@ -77,7 +77,7 @@ export class SignupComponent {
       .then(userCredential => {
         console.log('Registration successful:', userCredential.user);
         this.authService.updateLoginStatus(true);
-        this.router.navigateByUrl('/home');
+        this.router.navigateByUrl('pages/home');
       })
       .catch(error => {
         console.error('Registration error:', error);
@@ -86,16 +86,16 @@ export class SignupComponent {
 
         switch (error.code) {
           case 'auth/email-already-in-use':
-            this.signupError = 'This email is already in use.';
+            this.signupError = 'Az email használatban van!';
             break;
           case 'auth/invalid-email':
-            this.signupError = 'Invalid email.';
+            this.signupError = 'Nem megfelelő email.';
             break;
           case 'auth/weak-password':
-            this.signupError = 'The password is too weak. Use at least 6 characters.';
+            this.signupError = 'A jelszó túl gyenge.';
             break;
           default:
-            this.signupError = 'An error occurred during registration. Please try again later.';
+            this.signupError = 'Hiba, próbálja meg később!';
         }
       });
   }

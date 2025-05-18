@@ -43,12 +43,12 @@ export class LoginComponent {
 
   login() {
     if (this.email.invalid) {
-      this.loginError = 'Please enter a valid email address';
+      this.loginError = 'Használjon létező emailt!';
       return;
     }
     
     if (this.password.invalid) {
-      this.loginError = 'Password must be at least 6 characters long';
+      this.loginError = 'A jelszónak legalább 6 karakternek kell lennie.';
       return;
     }
 
@@ -72,16 +72,16 @@ export class LoginComponent {
         
         switch(error.code) {
           case 'auth/user-not-found':
-            this.loginError = 'No account found with this email address';
+            this.loginError = 'Nem létezik ilyen fióka  rendszerben.';
             break;
           case 'auth/wrong-password':
-            this.loginError = 'Incorrect password';
+            this.loginError = 'Érvénytelen belépési adatok!';
             break;
           case 'auth/invalid-credential':
-            this.loginError = 'Invalid email or password';
+            this.loginError = 'Érvénytelen belépési adatok!';
             break;
           default:
-            this.loginError = 'Authentication failed. Please try again later.';
+            this.loginError = 'Azonosítás nem sikerült. Próbálja meg később!';
         }
       });
   }
